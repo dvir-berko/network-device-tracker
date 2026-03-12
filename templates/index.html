@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Network Device Tracker</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <header>
+        <h1>Network Device Tracker</h1>
+        <p class="meta">
+          Subnet: <strong id="subnet">-</strong> | Last scan:
+          <strong id="lastScan">-</strong> | Online now:
+          <strong id="count">0</strong>
+        </p>
+        <p class="meta">
+          Nmap fingerprinting: <strong id="nmapStatus">-</strong>
+        </p>
+        <div class="actions">
+          <button id="refreshButton">Run Scan Now</button>
+          <span id="status"></span>
+        </div>
+      </header>
+
+      <section>
+        <h2>Auto-Identified Devices</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Status</th>
+              <th>Name</th>
+              <th>Type</th>
+              <th>OS Guess</th>
+              <th>Top Services</th>
+              <th>Vendor</th>
+              <th>IP</th>
+              <th>MAC</th>
+              <th>Hostname</th>
+              <th>Confidence</th>
+              <th>Last Seen</th>
+            </tr>
+          </thead>
+          <tbody id="deviceRows"></tbody>
+        </table>
+      </section>
+    </main>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>

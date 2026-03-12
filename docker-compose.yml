@@ -1,0 +1,16 @@
+services:
+  network-device-tracker:
+    build: .
+    container_name: network-device-tracker
+    network_mode: host
+    cap_add:
+      - NET_RAW
+      - NET_ADMIN
+    environment:
+      - ENABLE_NMAP_FINGERPRINT=true
+      - NMAP_TIMEOUT_SECONDS=20
+      - NMAP_REFRESH_SECONDS=1800
+      - NMAP_MAX_TARGETS_PER_SCAN=2
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
