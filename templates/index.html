@@ -3,50 +3,346 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Network Device Tracker</title>
+    <title>OwlSight</title>
     <link rel="stylesheet" href="/static/styles.css" />
   </head>
   <body>
+    <div class="bg-orb orb-a" aria-hidden="true"></div>
+    <div class="bg-orb orb-b" aria-hidden="true"></div>
+
     <main class="container">
-      <header>
-        <h1>Network Device Tracker</h1>
-        <p class="meta">
-          Subnet: <strong id="subnet">-</strong> | Last scan:
-          <strong id="lastScan">-</strong> | Online now:
-          <strong id="count">0</strong>
-        </p>
-        <p class="meta">
-          Nmap fingerprinting: <strong id="nmapStatus">-</strong>
-        </p>
-        <div class="actions">
-          <button id="refreshButton">Run Scan Now</button>
-          <span id="status"></span>
+      <header class="hero panel">
+        <div class="hero-head">
+          <div class="brand-wrap">
+            <p class="eyebrow">NETWORK OPERATIONS</p>
+            <svg
+              viewBox="0 0 560 180"
+              xmlns="http://www.w3.org/2000/svg"
+              class="brand-logo"
+              data-state="idle"
+              role="img"
+              aria-label="OwlSight logo"
+              fill="none"
+            >
+              <defs>
+                <linearGradient id="shieldGradient" x1="12" y1="8" x2="116" y2="124" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#3ABEFF" />
+                  <stop offset="58%" stop-color="#2563EB" />
+                  <stop offset="100%" stop-color="#0B1E4D" />
+                </linearGradient>
+                <linearGradient id="textGradient" x1="0" y1="35" x2="300" y2="75" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#3ABEFF" />
+                  <stop offset="58%" stop-color="#2563EB" />
+                  <stop offset="100%" stop-color="#0B1E4D" />
+                </linearGradient>
+              </defs>
+
+              <g transform="translate(20 14)">
+                <path
+                  class="logo-shield"
+                  d="M64 6C82 12 98 16 116 22L108 78C104 102 88 118 64 124C40 118 24 102 20 78L12 22C30 16 46 12 64 6Z"
+                  stroke="url(#shieldGradient)"
+                  stroke-width="4"
+                  fill="none"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M28 46L47 38L64 48L81 38L100 46"
+                  stroke="url(#shieldGradient)"
+                  stroke-width="4"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path d="M64 48V90" stroke="url(#shieldGradient)" stroke-width="4" stroke-linecap="round" />
+                <path d="M59 74Q64 84 69 74Q64 78 59 74Z" fill="#3ABEFF" />
+                <circle class="logo-eye-ring" cx="47" cy="52" r="12" stroke="url(#shieldGradient)" stroke-width="4" />
+                <circle class="logo-eye-ring" cx="81" cy="52" r="12" stroke="url(#shieldGradient)" stroke-width="4" />
+                <circle cx="47" cy="52" r="5" fill="#E6EEF8" />
+                <circle cx="81" cy="52" r="5" fill="#E6EEF8" />
+
+                <g class="logo-nodes" stroke="#3ABEFF" fill="#3ABEFF">
+                  <circle cx="24" cy="40" r="3" />
+                  <circle cx="34" cy="56" r="3" />
+                  <circle cx="30" cy="78" r="3" />
+                  <circle cx="42" cy="94" r="3" />
+                  <path d="M24 40L34 56L30 78L42 94L54 98" stroke-width="2.5" stroke-linecap="round" />
+
+                  <circle cx="104" cy="40" r="3" />
+                  <circle cx="94" cy="56" r="3" />
+                  <circle cx="98" cy="78" r="3" />
+                  <circle cx="86" cy="94" r="3" />
+                  <path d="M104 40L94 56L98 78L86 94L74 98" stroke-width="2.5" stroke-linecap="round" />
+                </g>
+
+                <path d="M54 98L64 108L74 98" stroke="url(#shieldGradient)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+              </g>
+
+              <g class="logo-wordmark" transform="translate(176 34)">
+                <circle cx="23" cy="42" r="18" stroke="url(#textGradient)" stroke-width="8" />
+                <circle cx="23" cy="42" r="5" fill="#E6EEF8" />
+                <text
+                  x="45"
+                  y="54"
+                  font-family="Inter, Manrope, Geist, Satoshi, Arial, sans-serif"
+                  font-size="62"
+                  font-weight="700"
+                  letter-spacing="-0.62"
+                  fill="#E6EEF8"
+                >
+                  wl
+                </text>
+                <text
+                  x="112"
+                  y="54"
+                  font-family="Inter, Manrope, Geist, Satoshi, Arial, sans-serif"
+                  font-size="62"
+                  font-weight="700"
+                  letter-spacing="-0.62"
+                  fill="url(#textGradient)"
+                >
+                  Sight
+                </text>
+              </g>
+            </svg>
+            <p class="brand-subtitle">Network Visibility Dashboard</p>
+          </div>
+          <div class="actions actions-compact" role="group" aria-label="Scan controls">
+            <label for="scanProfile" class="sr-only">Scan profile</label>
+            <select id="scanProfile" aria-label="Scan profile">
+              <option value="fast">Fast scan</option>
+              <option value="deep">Deep scan</option>
+            </select>
+            <button id="refreshButton" type="button">Queue Scan</button>
+          </div>
         </div>
+
+        <div class="stat-grid">
+          <article class="stat-card">
+            <span class="stat-label">Subnets</span>
+            <strong id="subnets" class="stat-value">-</strong>
+          </article>
+          <article class="stat-card">
+            <span class="stat-label">Last Scan</span>
+            <strong id="lastScan" class="stat-value">-</strong>
+          </article>
+          <article class="stat-card">
+            <span class="stat-label">Online Devices</span>
+            <strong id="count" class="stat-value">0</strong>
+          </article>
+          <article class="stat-card">
+            <span class="stat-label">Queue Depth</span>
+            <strong id="queueDepth" class="stat-value">0</strong>
+          </article>
+          <article class="stat-card">
+            <span class="stat-label">Nmap</span>
+            <strong id="nmapStatus" class="stat-value">-</strong>
+          </article>
+          <article class="stat-card">
+            <span class="stat-label">Last Live Update</span>
+            <strong id="lastLiveUpdate" class="stat-value">-</strong>
+          </article>
+        </div>
+
+        <p class="status-line"><span id="status" aria-live="polite">Live</span></p>
       </header>
 
-      <section>
-        <h2>Auto-Identified Devices</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Status</th>
-              <th>Name</th>
-              <th>Type</th>
-              <th>OS Guess</th>
-              <th>Top Services</th>
-              <th>Vendor</th>
-              <th>IP</th>
-              <th>MAC</th>
-              <th>Hostname</th>
-              <th>Confidence</th>
-              <th>Last Seen</th>
-            </tr>
-          </thead>
-          <tbody id="deviceRows"></tbody>
-        </table>
+      <section class="grid-two">
+        <article class="panel">
+          <div class="panel-title-row"><h2>Segments</h2></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Subnet</th><th>Online</th></tr></thead>
+              <tbody id="segmentRows"></tbody>
+            </table>
+          </div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-title-row"><h2>Network Traffic</h2></div>
+          <p class="meta">
+            RX: <strong id="rxRate">0</strong> | TX: <strong id="txRate">0</strong> | Total:
+            <strong id="totalRate">0</strong>
+          </p>
+          <div id="spark" class="sparkline" aria-label="Traffic sparkline"></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Interface</th><th>Total</th></tr></thead>
+              <tbody id="ifaceRows"></tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+
+      <section class="grid-two">
+        <article class="panel">
+          <div class="panel-title-row"><h2>Trends (14d)</h2></div>
+          <p class="meta">
+            Churn: new <strong id="churnNew">0</strong> / offline <strong id="churnOffline">0</strong>
+          </p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Day</th><th>Online</th><th>New</th><th>Offline</th><th>Anomalies</th></tr></thead>
+              <tbody id="trendRows"></tbody>
+            </table>
+          </div>
+        </article>
+        <article class="panel">
+          <div class="panel-title-row"><h2>Recurring Unknown Devices</h2></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>MAC</th><th>IP</th><th>Score</th></tr></thead>
+              <tbody id="unknownRows"></tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+
+      <section class="panel">
+        <div class="panel-title-row"><h2>Device Timeline</h2></div>
+        <div class="toolbar" role="group" aria-label="Timeline lookup controls">
+          <div class="field">
+            <label for="timelineMac">MAC address</label>
+            <input id="timelineMac" placeholder="aa:bb:cc:dd:ee:ff" aria-describedby="timelineHelp" />
+            <span id="timelineHelp" class="small">Enter full MAC address</span>
+          </div>
+          <button id="loadTimelineBtn" type="button">Load Timeline</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Time</th><th>Type</th><th>Severity</th><th>IP</th><th>Details</th></tr></thead>
+            <tbody id="timelineRows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-title-row"><h2>Webhooks</h2></div>
+        <div class="toolbar" role="group" aria-label="Webhook controls">
+          <div class="field">
+            <label for="hookUrl">Webhook URL</label>
+            <input id="hookUrl" placeholder="https://example.com/hook" />
+          </div>
+          <div class="field">
+            <label for="hookEvents">Events</label>
+            <input id="hookEvents" placeholder="event1,event2 or *" />
+          </div>
+          <button id="addHookBtn" type="button">Add Webhook</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>ID</th><th>URL</th><th>Events</th><th>Enabled</th><th>Created</th></tr></thead>
+            <tbody id="hookRows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-title-row"><h2>Recent Events</h2></div>
+        <div class="toolbar" role="group" aria-label="Event filters">
+          <div class="field">
+            <label for="eventFilter">Level</label>
+            <select id="eventFilter">
+              <option value="all">All levels</option>
+              <option value="info">Info</option>
+              <option value="warn">Warn</option>
+              <option value="error">Error</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="eventSearch">Search</label>
+            <input id="eventSearch" placeholder="search message" />
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Time</th><th>Level</th><th>Message</th></tr></thead>
+            <tbody id="logRows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-title-row"><h2>Devices</h2></div>
+        <div class="toolbar" role="group" aria-label="Device filters and sorting">
+          <div class="field field-wide">
+            <label for="deviceSearch">Search</label>
+            <input id="deviceSearch" placeholder="name, ip, mac, vendor" />
+          </div>
+          <div class="field">
+            <label for="statusFilter">Status</label>
+            <select id="statusFilter">
+              <option value="all">All</option>
+              <option value="online">Online</option>
+              <option value="offline">Offline</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="typeFilter">Type</label>
+            <input id="typeFilter" placeholder="type filter" />
+          </div>
+          <div class="field">
+            <label for="segmentFilter">Segment</label>
+            <input id="segmentFilter" placeholder="subnet filter" />
+          </div>
+          <div class="field">
+            <label for="sortBy">Sort by</label>
+            <select id="sortBy">
+              <option value="status">Status</option>
+              <option value="name">Name</option>
+              <option value="ip">IP</option>
+              <option value="last_seen">Last seen</option>
+              <option value="unknown_score">Unknown score</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="sortDir">Direction</label>
+            <select id="sortDir">
+              <option value="asc">Asc</option>
+              <option value="desc">Desc</option>
+            </select>
+          </div>
+        </div>
+        <div id="deviceLoading" class="skeleton-wrap" aria-hidden="true">
+          <div class="skeleton-line"></div>
+          <div class="skeleton-line"></div>
+          <div class="skeleton-line"></div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Status</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Vendor</th>
+                <th>IP</th>
+                <th>MAC</th>
+                <th>Segment</th>
+                <th>Ports</th>
+                <th>Avg Session</th>
+                <th>Unknown Score</th>
+                <th>Confidence</th>
+                <th>Last Seen</th>
+              </tr>
+            </thead>
+            <tbody id="deviceRows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-title-row"><h2>Integration API</h2></div>
+        <p class="meta">
+          Use <code>X-API-Key</code> with <code>/api/integrations/state</code> and
+          <code>/api/integrations/hooks/test</code>.
+        </p>
       </section>
     </main>
 
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script>
+      window.APP_API_KEY = {{ api_key|tojson }};
+    </script>
     <script src="/static/app.js"></script>
   </body>
 </html>

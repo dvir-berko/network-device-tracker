@@ -7,10 +7,32 @@ services:
       - NET_RAW
       - NET_ADMIN
     environment:
-      - ENABLE_NMAP_FINGERPRINT=true
+      - APP_PORT=8080
+      - HEARTBEAT_SECONDS=8
+      - SCAN_FAST_INTERVAL=60
+      - SCAN_DEEP_INTERVAL=900
+      - SCAN_MAX_HOSTS=64
       - NMAP_TIMEOUT_SECONDS=20
-      - NMAP_REFRESH_SECONDS=1800
-      - NMAP_MAX_TARGETS_PER_SCAN=2
+      - NMAP_MAX_TARGETS_PER_SCAN=4
+      - HOST_CACHE_TTL_SECONDS=300
+      - SCAN_WORKERS=1
+      - ENRICH_WORKERS=16
+      - TRAFFIC_SAMPLE_SECONDS=2
+      - TRAFFIC_HISTORY_POINTS=150
+      - SCAN_SUBNETS=
+      - ENABLE_NMAP_SERVICE_PROBES=true
+      - CRITICAL_DEVICE_TYPES=Router,Camera
+      - ALERT_WEBHOOK_URL=
+      - API_KEYS=${API_KEYS:-change-me-now}
+      - UI_API_KEY=${UI_API_KEY:-change-me-now}
+      - DB_PATH=data/tracker.db
+      - MAX_SCAN_SUBNET_HOSTS=512
+      - MAX_SUBNETS_PER_SCAN=8
+      - ALLOW_PRIVATE_WEBHOOKS=false
+      - WEBHOOK_ALLOWLIST=
     volumes:
       - ./data:/app/data
+    init: true
+    security_opt:
+      - no-new-privileges:true
     restart: unless-stopped
